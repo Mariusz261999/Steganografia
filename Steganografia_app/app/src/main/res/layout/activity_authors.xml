@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="0pt"
+    android:layout_marginLeft="0pt"
+    android:background="#6C3D3D"
+    android:orientation="vertical"
+    tools:context=".AuthorsActivity">
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10pt"
+        android:layout_marginBottom="40pt"
+        android:gravity="center_horizontal"
+        android:text="Autorzy:"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15pt"
+        android:layout_marginLeft="15pt"
+        android:layout_marginBottom="20pt"
+        android:text="Mariusz Nieciecki"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15pt"
+        android:layout_marginLeft="15pt"
+        android:text="Marta Kot"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp" />
+</LinearLayout>
