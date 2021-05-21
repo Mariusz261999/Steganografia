@@ -29,11 +29,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Twój klucz"
+        android:text="Twoja wiadomość"
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -45,21 +45,33 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15pt"
         android:gravity="center"
-        android:text="Twoja wiadomość"
+        android:text="Twój klucz"
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="60pt"
+        android:id="@+id/buttonZdekoduj"
+        android:layout_width="50pt"
         android:layout_height="wrap_content"
         android:layout_marginTop="10pt"
-        android:text="Zdekoduj" />
+        android:text="Zakoduj" />
+
+    <Button
+        android:id="@+id/buttonZapisz"
+        android:layout_width="50pt"
+        android:layout_height="wrap_content"
+        android:text="Zapisz" />
+
+    <TextView
+        android:id="@+id/whether_encoded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
 </LinearLayout>

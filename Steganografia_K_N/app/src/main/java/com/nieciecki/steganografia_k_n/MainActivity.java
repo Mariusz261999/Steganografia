@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void SteganoInfo(View view){
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pl.wikipedia.org/wiki/Steganografia"));
         startActivity(browserIntent);
     }
 
@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void DecodeView(View view){
-        startActivity(new Intent(getApplicationContext(),Decode.class));
+        startActivity(new Intent(getApplicationContext(), Encode.class));
     }
     public void EncodeView(View view){
-        startActivity(new Intent(getApplicationContext(),Encode.class));
+        startActivity(new Intent(getApplicationContext(), Decode.class));
     }
 }
