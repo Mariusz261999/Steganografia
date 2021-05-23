@@ -33,11 +33,11 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/message"
+        android:id="@+id/key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/textView5"
@@ -45,11 +45,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15pt"
         android:gravity="center"
-        android:text="Twoja wiadomość"
+        android:text="Ukryta wiadomość"
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/key"
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

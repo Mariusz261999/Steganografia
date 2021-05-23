@@ -1,18 +1,17 @@
 package com.nieciecki.steganografia_k_n;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-//import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ayush.imagesteganographylibrary.Text.AsyncTaskCallback.TextDecodingCallback;
 import com.ayush.imagesteganographylibrary.Text.ImageSteganography;
@@ -37,44 +36,26 @@ public class Decode extends AppCompatActivity implements TextDecodingCallback{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decode);
+
         //Instantiation of UI components
         textView = findViewById(R.id.whether_decoded);
-
         imageView = findViewById(R.id.ImageViewSearchIcon);
-
         message = findViewById(R.id.message);
         secret_key = findViewById(R.id.key);
-
         Button choose_image_button = findViewById(R.id.btnPhoto);
         Button decode_button = findViewById(R.id.buttonZdekoduj);
 
         //Choose Image Button
-        choose_image_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImageChooser();
-            }
-        });
+        choose_image_button.setOnClickListener((view)->{ImageChooser();});
 
         //Decode Button
-        decode_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (filepath != null) {
-
-                    //Making the ImageSteganography object
-                    ImageSteganography imageSteganography = new ImageSteganography(secret_key.getText().toString(),
-                            original_image);
-
-                    //Making the TextDecoding object
-                    TextDecoding textDecoding = new TextDecoding(Decode.this, Decode.this);
-
-                    //Execute Task
-                    textDecoding.execute(imageSteganography);
-                }
+        decode_button.setOnClickListener((view)->{
+            if(filepath!=null){
+                ImageSteganography imageSteganography = new ImageSteganography(secret_key.getText().toString(),original_image);
+                TextDecoding textDecoding = new TextDecoding(Decode.this, Decode.this);
+                textDecoding.execute(imageSteganography);
             }
         });
-
 
     }
 
