@@ -31,6 +31,7 @@ class EncodeDecode {
      * @parameter : messageEncodingStatus {object}
      * @parameter : progressHandler {A handler interface, for the progress bar}
      */
+    //Kodowanie zaszyfrowanej wiadomosci w zdjeciu na 2 najmniej znaczacych bitach zdjecia
 
     private static byte[] encodeMessage(int[] integer_pixel_array, int image_columns, int image_rows,
                                         MessageEncodingStatus messageEncodingStatus, ProgressHandler progressHandler) {
@@ -59,6 +60,7 @@ class EncodeDecode {
                     if (!messageEncodingStatus.isMessageEncoded()) {
 
                         // Shifting integer value by 2 in left and replacing the two least significant digits with the message_byte_array values..
+                        //przesunięcie wartości całkowitej o 2 w lewo i zastąpienie dwóch najmniej znaczących cyfr wartościami message_byte_array.
                         tmp = (byte) ((((integer_pixel_array[element] >> binary[channelIndex]) & 0xFF) & 0xFC) | ((messageEncodingStatus.getByteArrayMessage()[messageEncodingStatus.getCurrentMessageIndex()] >> toShift[(shiftIndex++)
                                 % toShift.length]) & 0x3));// 6
 
@@ -179,7 +181,7 @@ class EncodeDecode {
             }
         }
 
-        return result;
+        return result; //bitmapa z zakodowana wiadomoscia
     }
 
     /**

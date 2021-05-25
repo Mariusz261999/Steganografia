@@ -28,10 +28,10 @@ public class TextEncoding extends AsyncTask<ImageSteganography, Integer, ImageSt
 
     public TextEncoding(Activity activity, TextEncodingCallback callbackInterface) {
         super();
-        this.progressDialog = new ProgressDialog(activity); //Wbudowana funkcja
+        this.progressDialog = new ProgressDialog(activity);
         this.callbackInterface = callbackInterface;
         //making result object
-        this.result = new ImageSteganography();
+        this.result = new ImageSteganography();   //wywoluje konstruktor domyslny klasy ImageSteganography
     }
 
     //pre execution of method
@@ -41,8 +41,8 @@ public class TextEncoding extends AsyncTask<ImageSteganography, Integer, ImageSt
 
         //setting parameters of progress dialog
         if (progressDialog != null) {
-            progressDialog.setMessage("Loading, Please Wait...");
-            progressDialog.setTitle("Encoding Message");
+            progressDialog.setMessage("Ładowanie, proszę czekać");
+            progressDialog.setTitle("Kodowanie wiadomości");
             progressDialog.setIndeterminate(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -81,10 +81,10 @@ public class TextEncoding extends AsyncTask<ImageSteganography, Integer, ImageSt
 
             ImageSteganography textStegnography = imageSteganographies[0];
 
-            //getting image bitmap
+            //Przeksztalcenie zdjecia na bitmape
             Bitmap bitmap = textStegnography.getImage();
 
-            //getting height and width of original image
+            //pobranie wysokosci i szerokosci oryginalnego zdjecia
             int originalHeight = bitmap.getHeight();
             int originalWidth = bitmap.getWidth();
 
@@ -115,21 +115,21 @@ public class TextEncoding extends AsyncTask<ImageSteganography, Integer, ImageSt
                 }
             });
 
-            //free Memory
+            //zwolnienie pamieci
             for (Bitmap bitm : src_list)
                 bitm.recycle();
 
             //Java Garbage collector
             System.gc();
 
-            //merging the split encoded image
+            //Sklejenie malych zakodowanych kawalkow zdjecia w calosc
             Bitmap srcEncoded = Utility.mergeImage(encoded_list, originalHeight, originalWidth);
 
             //Setting encoded image to result
-            result.setEncoded_image(srcEncoded);
+            result.setEncoded_image(srcEncoded); //encodedImage->srcEncoded
             result.setEncoded(true);
         }
 
-        return result;
+        return result; //zwraca zakodowane zdjecie
     }
 }

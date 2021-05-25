@@ -1,9 +1,6 @@
 package com.nieciecki.steganografia_k_n;
 
-import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,382 +10,121 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.ayush.imagesteganographylibrary.Text.AsyncTaskCallback.TextEncodingCallback;
 import com.ayush.imagesteganographylibrary.Text.ImageSteganography;
 import com.ayush.imagesteganographylibrary.Text.TextEncoding;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+
 public class Encode extends AppCompatActivity implements TextEncodingCallback{
     private static final int SELECT_PICTURE = 100;
     private static final String TAG = "Encode Class";
-    //Created variables for UI
-    private TextView whether_encoded;
-    private ImageView imageView;
+    //Deklaracja zmiennych edytowalnych przez użytkownika
     private EditText message;
-    private EditText secret_key;
-    //Objects needed for encoding
-    private TextEncoding textEncoding;
-    private ImageSteganography imageSteganography;
-    private ProgressDialog save;
-    private Uri filepath;
-    //Bitmaps
-    private Bitmap original_image;
-    private Bitmap encoded_image;
+    private EditText secretKey;
+    private TextView textView;
+    //Deklaracja obiektów uzywanych podczas kodowania
+    private TextEncoding textEncoding;                //z biblioteki
+    private ImageSteganography imageSteganography;    //z biblioteki
+    private Uri filepath;                             //deklaracja zmiennej (sciezka do pliku)
+    //Deklaracja bitmap
+    private Bitmap originalImg;                       //Bitmapa oryginalnego zdjęcia
+    private Bitmap encodedImg;                        //Bitmapa zakodowanego zdjecia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_encode);
 
-        whether_encoded = findViewById(R.id.tencoded);
-        imageView = findViewById(R.id.ImageViewSearchIcon);
+        //Pobranie elementow z interfejsu
         message = findViewById(R.id.key);
-        secret_key=findViewById(R.id.message);
-        Button chose_image_button = findViewById(R.id.btnPhoto);
-        Button encode_button = findViewById(R.id.buttonZdekoduj);
-        Button save_image_button = findViewById(R.id.buttonZapisz);
-        checkAndRequestPermissions();
+        secretKey =findViewById(R.id.message);
+        textView =findViewById(R.id.imgCheck);
 
-        chose_image_button.setOnClickListener((view)->{imageChooser();});
+        //Przypisanie przyciskow do zmiennych
+        Button btnChooseImg = findViewById(R.id.btnPhoto);
+        Button btnEncode = findViewById(R.id.btnEncd);
+        Button btnSave = findViewById(R.id.btnSave);
 
-        encode_button.setOnClickListener(new View.OnClickListener() {
+        //Dodanie akcji do przycisku - wybranie zdjecia do zakodowania
+        btnChooseImg.setOnClickListener((view)->{imageChooser();});
+
+        //Dodanie akcji do przycisku - kodowanie
+        btnEncode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                whether_encoded.setText("");
-                if(filepath!=null){
-                    if(message.getText()!=null){
-                        imageSteganography = new ImageSteganography(message.getText().toString(),secret_key.getText().toString(),original_image);
-                        textEncoding = new TextEncoding(Encode.this, Encode.this);
+                if(filepath!=null){                                                                                                             //sprawdzenie czy wybrano zdjecie
+                    if(message.getText()!=null){                                                                                                //sprawdzenie czy wpisano wiadomosc do zakodowania
+                        imageSteganography = new ImageSteganography(message.getText().toString(), secretKey.getText().toString(), originalImg); //Stworzenie obieku klasy ImageSteganography (wraz z podanymi atrybutami) - zwraca zaszyfrowana wiadomosc
+                        textEncoding = new TextEncoding(Encode.this, Encode.this);                                        //Klasa textEncoding
                         textEncoding.execute(imageSteganography);
                     }
                 }
             }
         });
 
-        save_image_button.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Bitmap imgToSave=encoded_image;
+                final Bitmap imgToSave= encodedImg;
                 Thread PerformEncoding = new Thread((Runnable) ()->{
-                    saveToInternalStorage(imgToSave);
+                    saveEncodedImg(imgToSave);
                 });
-                save = new ProgressDialog(Encode.this);
-                save.setMessage("Trwa zapisywanie, Proszę czekać...");
-                save.setTitle("Zapisywanie obrazka");
-                save.setIndeterminate(false);
-                save.setCancelable(false);
-                save.show();
                 PerformEncoding.start();
             }
         });
 
-
-
     }
 
-    private void saveToInternalStorage(Bitmap bitmapImage){
+    private void saveEncodedImg(Bitmap bitmapImage){
         OutputStream fOut;
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS),"encoded"+".PNG");
+                Environment.DIRECTORY_DOWNLOADS),"zakodowane"+System.currentTimeMillis()+".PNG");
         try {
             fOut = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.PNG,100,fOut);
             fOut.flush();
             fOut.close();
-            whether_encoded.post(()->{save.dismiss();});
+            textView.setText("ZAPISANO");
         }catch (FileNotFoundException e){ e.printStackTrace();} catch (IOException e ){e.printStackTrace();}
     }
 
+    //Cialo funkcji wybierajacej zdjecie do zakodowania
     private void imageChooser() {
-        Intent intent = new Intent();
+        Intent intent = new Intent();                                      //utworzenie obiektu klasy intent (do wywolania aktywnosci)
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select Picture"),SELECT_PICTURE);
+        startActivityForResult(Intent.createChooser(intent,"Wybierz zdjecie"),SELECT_PICTURE); //wywolanie funkcji
     }
 
-    private void checkAndRequestPermissions() {
-        int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int ReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (ReadPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
-        if (permissionWriteStorage != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), 1);
-        }
-    }
+    //Cialo funkcji wywolujacej wybor zdjecia z galerii
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //Image set to imageView
-        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {  //sprawdzenie warunkow
 
-            filepath = data.getData();
+            filepath = data.getData();                                                                             //Przypisanie sciezki do zmiennej
             try {
-                original_image = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);
-
-                imageView.setImageBitmap(original_image);
+                originalImg = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);                   //przypisanie bitmapy(zdjecie do zakodowania)
+                textView.setText("WYBRANO ZDJECIE");                                                               //Wyswietlenie wiadomosci o wyborze zdjecia
             } catch (IOException e) {
                 Log.d(TAG, "Error : " + e);
             }
         }
-
     }
     @Override
-    public void onStartTextEncoding() {
-
-    }
+    public void onStartTextEncoding() {}
 
     @Override
     public void onCompleteTextEncoding(ImageSteganography result) {
         if (result != null && result.isEncoded()) {
-            encoded_image = result.getEncoded_image();
-            whether_encoded.setText("Encoded");
-            imageView.setImageBitmap(encoded_image);
+            encodedImg = result.getEncoded_image();                //przypisanie pomyslnie zakodowanego zdjecia
+            textView.setText("ZAKODOWANO ZDJECIE");
         }
     }
 }
-/*
-public class Encode extends AppCompatActivity implements TextEncodingCallback   {
-
-    private static final int SELECT_PICTURE = 100;
-    private static final String TAG = "Encode Class";
-    //Created variables for UI
-    private TextView whether_encoded;
-    private ImageView imageView;
-    private EditText message;
-    private EditText secret_key;
-    //Objects needed for encoding
-    private TextEncoding textEncoding;
-    private ImageSteganography imageSteganography;
-    private ProgressDialog save;
-    private Uri filepath;
-    //Bitmaps
-    private Bitmap original_image;
-    private Bitmap encoded_image;
-
-////    ImageView imageView;
-//    Button buttonPhoto;
-////    ImageView imageView;
-//    private static final int PICK_IMAGE=100;
-//    Uri imageUri;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_encode);
-        //ELEMENTY WIDOKU:
-        whether_encoded = findViewById(R.id.whether_encoded);
-        imageView = findViewById(R.id.ImageViewSearchIcon);
-        message = findViewById(R.id.message);
-        secret_key = findViewById(R.id.key);
-
-        //Przyciski
-        Button choose_image_button = findViewById(R.id.btnPhoto);
-        Button encode_button = findViewById(R.id.buttonZdekoduj);
-        Button save_image_button = findViewById(R.id.buttonZapisz);
-        checkAndRequestPermissions();
-        //Choose image button
-        choose_image_button.setOnClickListener((view)->{ImageChooser();});
-        //Encode button
-        encode_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                whether_encoded.setText("");
-                if (filepath != null) {
-                    if (message.getText() != null) {
-
-                        //ImageSteganography Object instantiation
-                        imageSteganography = new ImageSteganography(message.getText().toString(),
-                                secret_key.getText().toString(),
-                                original_image); //Obiekt, który zwraca zakodowaną wiadomość w sensie że 01010101 BASE 64
-                        //TextEncoding object Instantiation
-                        textEncoding = new TextEncoding(Encode.this, Encode.this);
-                        //Executing the encoding
-                        textEncoding.execute(imageSteganography);
-//
-                    }
-                }
-            }
-        });
-        //Save image button
-        save_image_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Bitmap imgToSave = encoded_image;
-//                Thread PerformEncoding = new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        saveToInternalStorage(imgToSave);
-//                    }
-//                });
-                Thread PerformEncoding = new Thread((Runnable) ()->{
-                    saveToInternalStorage(imgToSave);
-//                    saveEncodedImage(imgToSave);
-//                    startSave(imgToSave);
-                });
-                save = new ProgressDialog(Encode.this);
-                save.setMessage("Saving, Please Wait...");
-                save.setTitle("Saving Image");
-                save.setIndeterminate(false);
-                save.setCancelable(false);
-                save.show();
-                PerformEncoding.start();
-            }
-        });
-        //Koniec onCreate
-    }
-    private void ImageChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //Image set to imageView
-        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            filepath = data.getData();
-            try {
-                original_image = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);
-
-                imageView.setImageBitmap(original_image);
-            } catch (IOException e) {
-                Log.d(TAG, "Error : " + e);
-            }
-        }
-
-    }
-    // Override method of TextEncodingCallback
-
-    @Override
-    public void onStartTextEncoding() {
-        //Whatever you want to do at the start of text encoding
-    }
-
-    @Override
-    public void onCompleteTextEncoding(ImageSteganography result) {
-
-        //By the end of textEncoding
-
-        if (result != null && result.isEncoded()) {
-            encoded_image = result.getEncoded_image();
-            whether_encoded.setText("Encoded");
-            imageView.setImageBitmap(encoded_image);
-        }
-    }
-
-    private void saveToInternalStorage(Bitmap bitmapImage) {
-        OutputStream fOut;
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS), "Encoded" + ".PNG"); // the File to save ,
-        try {
-            fOut = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
-            fOut.flush(); // Not really required
-            fOut.close(); // do not forget to close the stream
-            whether_encoded.post(()->{save.dismiss();});
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    //Pierwsza proba
-    OutputStream outputStream;
-    private void saveEncodedImage(Bitmap bitmap){
-        File filepath = Environment.getExternalStorageDirectory();
-        File dir = new File(filepath.getAbsolutePath()+"/Zakodowane/");
-        dir.mkdir();
-        File file = new File(dir,System.currentTimeMillis()+".jpg");
-        try {
-            outputStream = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
-        Toast.makeText(getApplicationContext(), "Image Save To internal!!!",Toast.LENGTH_SHORT).show();
-        try {
-            outputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-    //druga proba
-    public void startSave(Bitmap bitmap){
-        FileOutputStream fileOutputStream=null;
-        File file=getDisc();
-        if(!file.exists() && !file.mkdirs()){
-            Toast.makeText(this, "Nie da się stworzyć katalogu", Toast.LENGTH_SHORT).show();
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyymmsshhmmss");
-        String date=simpleDateFormat.format(new Date());
-        String name="Img"+date+".jpg";
-        String file_name=file.getAbsolutePath()+"/"+name;
-        File new_file = new File(file_name);
-        try{
-            fileOutputStream = new FileOutputStream(new_file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
-            Toast.makeText(this,"pomyślnie zapisano",Toast.LENGTH_SHORT).show();
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-            refreshGallery(new_file);
-    }
-    public void refreshGallery(File file){
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        intent.setData(Uri.fromFile(file));
-        sendBroadcast(intent);
-    }
-    private File getDisc(){
-        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        return new File(file, "Image Demo");
-    }
-////////Koniec drugiej próby
-
-    private void checkAndRequestPermissions() {
-        int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int ReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (ReadPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
-        if (permissionWriteStorage != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), 1);
-        }
-    }
-}*/

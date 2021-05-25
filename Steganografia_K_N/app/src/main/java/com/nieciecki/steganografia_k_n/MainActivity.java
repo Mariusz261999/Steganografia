@@ -16,19 +16,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Button buttonZakoduj = findViewById(R.id.btnZakoduj);
-        Button buttonZdekoduj = findViewById(R.id.btnZdekoduj);
-        Button buttonAutorzy = findViewById(R.id.btnAutorzy);
+        Button btnEncode = findViewById(R.id.btnEncode);
+        Button btnDecode = findViewById(R.id.btnDecode);
+        Button btnAuthors = findViewById(R.id.btnAuthors);
         Button buttonInfo = findViewById(R.id.btnInfo);
-        Button buttonWyjdz = findViewById(R.id.btnWyjdz);
+        Button btnExit = findViewById(R.id.btnExit);
 
         buttonInfo.setOnClickListener(this::SteganoInfo);
-        buttonWyjdz.setOnClickListener(this::Exit);
-        buttonAutorzy.setOnClickListener(this::AuthorsView);
-        buttonZakoduj.setOnClickListener(this::DecodeView);
-        buttonZdekoduj.setOnClickListener(this::EncodeView);
+        btnExit.setOnClickListener(this::Exit);
+        btnAuthors.setOnClickListener(this::AuthorsView);
+        btnEncode.setOnClickListener(this::DecodeView);
+        btnDecode.setOnClickListener(this::EncodeView);
     }
-
 
     public void SteganoInfo(View view){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pl.wikipedia.org/wiki/Steganografia"));
@@ -42,11 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void AuthorsView(View view){
         startActivity(new Intent(getApplicationContext(), Authors.class));
-
     }
+
     public void DecodeView(View view){
         startActivity(new Intent(getApplicationContext(), Encode.class));
     }
+
     public void EncodeView(View view){
         startActivity(new Intent(getApplicationContext(), Decode.class));
     }

@@ -39,21 +39,21 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnZakoduj"
+            android:id="@+id/btnEncode"
             android:layout_width="100pt"
             android:layout_height="wrap_content"
             android:text="Zakoduj"
             android:visibility="visible" />
 
         <Button
-            android:id="@+id/btnZdekoduj"
+            android:id="@+id/btnDecode"
             android:layout_width="100pt"
             android:layout_height="wrap_content"
             android:text="Zdekoduj"
             tools:visibility="visible" />
 
         <Button
-            android:id="@+id/btnAutorzy"
+            android:id="@+id/btnAuthors"
             android:layout_width="100pt"
             android:layout_height="wrap_content"
             android:text="Autorzy"
@@ -68,7 +68,7 @@
             tools:visibility="visible" />
 
         <Button
-            android:id="@+id/btnWyjdz"
+            android:id="@+id/btnExit"
             android:layout_width="100pt"
             android:layout_height="wrap_content"
             android:text="Wyjdź"

@@ -6,14 +6,13 @@ import android.util.Log;
 import com.ayush.imagesteganographylibrary.Utils.Crypto;
 import com.ayush.imagesteganographylibrary.Utils.Utility;
 
-/**
- * This main class of the text steganography
- */
+    //Glowna klasa dotyczaca steganografii zdjec
 public class ImageSteganography {
 
     //Tag for Log
     private static final String TAG = ImageSteganography.class.getName();
 
+    //Deklaracja zmiennych
     private String message;
     private String secret_key;
     private String encrypted_message;
@@ -24,6 +23,7 @@ public class ImageSteganography {
     private Boolean decoded;
     private Boolean secretKeyWrong;
 
+    //Konstruktor z domyslnymi wartosciami
     public ImageSteganography() {
         this.encoded = false;
         this.decoded = false;
@@ -36,10 +36,11 @@ public class ImageSteganography {
         this.encrypted_zip = new byte[0];
     }
 
+    //Konstruktor przyjmujacy wartosci
     public ImageSteganography(String message, String secret_key, Bitmap image) {
-
+        //Przypisanie wartosci do zmiennych
         this.message = message;
-        this.secret_key = convertKeyTo128bit(secret_key);
+        this.secret_key = convertKeyTo128bit(secret_key);                           //konwertowanie podanego przez uzytkownika klucza na bajty
         this.image = image;
         /*try {
             this.encrypted_zip = Zipping.compress(message);
@@ -47,14 +48,14 @@ public class ImageSteganography {
             e.printStackTrace();
         } */
 
-        this.encrypted_zip = message.getBytes();
-        this.encrypted_message = encryptMessage(message, this.secret_key);
+        this.encrypted_zip = message.getBytes();                                    //kodowanie tekstu w sekwencje bajtow - zwraca tablice bajtow
+        this.encrypted_message = encryptMessage(message, this.secret_key);          //wywolanie funckji kodujacej
 
         this.encoded = false;
         this.decoded = false;
         this.secretKeyWrong = true;
 
-        this.encoded_image = Bitmap.createBitmap(600, 600, Bitmap.Config.ARGB_8888);
+        this.encoded_image = Bitmap.createBitmap(600, 600, Bitmap.Config.ARGB_8888); //zapisanie kazdego piskela na 8 bajtach
 
     }
 
@@ -79,7 +80,7 @@ public class ImageSteganography {
         if (message != null) {
             if (!Utility.isStringEmpty(secret_key)) {
                 try {
-                    encrypted_message = Crypto.encryptMessage(message, secret_key);
+                    encrypted_message = Crypto.encryptMessage(message, secret_key);   //Wywolanie funkcji encryptMessage(klasa Crypto) i przypisanie jej wyniku do encrypted_message
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -110,19 +111,18 @@ public class ImageSteganography {
         return decrypted_message;
     }
 
+    //cialo funkcji konwertujacej ciag znakow na bajty
     private static String convertKeyTo128bit(String secret_key) {
-
-        StringBuilder result = new StringBuilder(secret_key); //To wbudowane konwertuje tekst i cyfy tak że są w cudzysłowie i średnik na koncu
-
+        StringBuilder result = new StringBuilder(secret_key);             //Funkcja konwertuje tekst i cyfy na 'secret_key';
         if (secret_key.length() <= 16) {
             for (int i = 0; i < (16 - secret_key.length()); i++) {
-                result.append("#"); //Dodanie na końcu hasztagów ##
+                result.append("#");                                       //Dodanie do klucza w wolne miejsca znaku #
             }
         } else {
-            result = new StringBuilder(result.substring(0, 15)); //To wbudowane
+            result = new StringBuilder(result.substring(0, 16));          //Jesli dlugosc klucza jest wieksza od 16 to wartosc secret_key jest ucieta(przypisujemy ja do zmiennej result)
         }
 
-        Log.d(TAG, "Secret Key Length : " + result.toString().getBytes().length);
+        Log.d(TAG, "Secret Key Length : " + result.toString().getBytes().length); //wyswietlenie w konsoli
 
         return result.toString();
     }

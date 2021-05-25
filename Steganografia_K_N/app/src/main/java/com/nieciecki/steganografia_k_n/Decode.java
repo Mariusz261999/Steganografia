@@ -1,5 +1,4 @@
 package com.nieciecki.steganografia_k_n;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,7 +7,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,17 +16,15 @@ import com.ayush.imagesteganographylibrary.Text.ImageSteganography;
 import com.ayush.imagesteganographylibrary.Text.TextDecoding;
 
 import java.io.IOException;
-
 public class Decode extends AppCompatActivity implements TextDecodingCallback{
 
     private static final int SELECT_PICTURE = 100;
     private static final String TAG = "Decode Class";
     //Initializing the UI components
-    private TextView textView;
-    private ImageView imageView;
     private EditText message;
-    private EditText secret_key;
+    private TextView textView;
     private Uri filepath;
+    private EditText secretKey;
     //Bitmap
     private Bitmap original_image;
 
@@ -38,25 +34,23 @@ public class Decode extends AppCompatActivity implements TextDecodingCallback{
         setContentView(R.layout.activity_decode);
 
         //Instantiation of UI components
-        textView = findViewById(R.id.whether_decoded);
-        imageView = findViewById(R.id.ImageViewSearchIcon);
+        secretKey = findViewById(R.id.key);
         message = findViewById(R.id.message);
-        secret_key = findViewById(R.id.key);
-        Button choose_image_button = findViewById(R.id.btnPhoto);
-        Button decode_button = findViewById(R.id.buttonZdekoduj);
+        textView = findViewById(R.id.status);
+        Button btnDecode = findViewById(R.id.btnEncd);
+        Button btnChooseImg = findViewById(R.id.btnPhoto);
 
         //Choose Image Button
-        choose_image_button.setOnClickListener((view)->{ImageChooser();});
+        btnChooseImg.setOnClickListener((view)->{ImageChooser();});
 
         //Decode Button
-        decode_button.setOnClickListener((view)->{
+        btnDecode.setOnClickListener((view)->{
             if(filepath!=null){
-                ImageSteganography imageSteganography = new ImageSteganography(secret_key.getText().toString(),original_image);
+                ImageSteganography imageSteganography = new ImageSteganography(secretKey.getText().toString(),original_image);
                 TextDecoding textDecoding = new TextDecoding(Decode.this, Decode.this);
                 textDecoding.execute(imageSteganography);
             }
         });
-
     }
 
     private void ImageChooser() {
@@ -69,47 +63,37 @@ public class Decode extends AppCompatActivity implements TextDecodingCallback{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //Image set to imageView
         if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
             filepath = data.getData();
             try {
                 original_image = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);
-
-                imageView.setImageBitmap(original_image);
+                textView.setText("WYBRANO ZDJECIE");
             } catch (IOException e) {
                 Log.d(TAG, "Error : " + e);
             }
         }
-
     }
 
     @Override
-    public void onStartTextEncoding() {
-        //Whatever you want to do by the start of textDecoding
-    }
+    public void onStartTextEncoding() {}
 
     @Override
     public void onCompleteTextEncoding(ImageSteganography result) {
-
         //By the end of textDecoding
-
         if (result != null) {
             if (!result.isDecoded())
-                textView.setText("No message found");
+                textView.setText("BRAK WIADOMOSCI");
             else {
                 if (!result.isSecretKeyWrong()) {
-                    textView.setText("Decoded");
+                    textView.setText("ZDEKODOWANO");
                     message.setText("" + result.getMessage());
                 } else {
-                    textView.setText("Wrong secret key");
+                    textView.setText("ZLY KLUCZ");
                 }
             }
         } else {
-            textView.setText("Select Image First");
+            textView.setText("MUSISZ WYBRAC ZDJECIE");
         }
-
-
     }
 }

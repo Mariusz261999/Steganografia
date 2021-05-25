@@ -4,25 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7F67AA"
+    android:background="#BBABD8"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".Encode">
-
-    <ImageView
-        android:id="@+id/ImageViewSearchIcon"
-        android:layout_width="100pt"
-        android:layout_height="100pt"
-        android:layout_marginTop="-25pt"
-        app:srcCompat="@android:drawable/ic_search_category_default" />
 
     <Button
         android:id="@+id/btnPhoto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15pt"
-        android:layout_marginBottom="15pt"
-        android:text="Wybierz zdjęcie" />
+        android:layout_marginLeft="45pt"
+        android:layout_marginTop="-40pt"
+        android:layout_marginRight="45pt"
+        android:layout_marginBottom="0pt"
+        android:text="Wybierz zdjęcie"
+        android:textSize="18sp"
+        app:backgroundTint="@color/purple_500" />
+
+    <TextView
+        android:id="@+id/imgCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30pt"
+        android:layout_marginTop="20pt"
+        android:layout_marginRight="30pt"
+        android:layout_marginBottom="20pt"
+        android:background="#BBABD8"
+        android:gravity="center"
+        android:textColor="#6200EE"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView4"
@@ -36,6 +47,8 @@
         android:id="@+id/key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
         android:ems="10"
         android:inputType="textPersonName" />
 
@@ -52,26 +65,22 @@
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20pt"
+        android:layout_marginRight="20pt"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/buttonZdekoduj"
+        android:id="@+id/btnEncd"
         android:layout_width="50pt"
         android:layout_height="wrap_content"
         android:layout_marginTop="10pt"
         android:text="Zakoduj" />
 
     <Button
-        android:id="@+id/buttonZapisz"
+        android:id="@+id/btnSave"
         android:layout_width="50pt"
         android:layout_height="wrap_content"
         android:text="Zapisz" />
-
-    <TextView
-        android:id="@+id/tencoded"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
 </LinearLayout>

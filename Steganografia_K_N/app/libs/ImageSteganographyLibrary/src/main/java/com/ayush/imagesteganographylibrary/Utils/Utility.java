@@ -36,17 +36,19 @@ public class Utility {
     }
 
     /**
-     * This method splits the image into many images of ( SQUARE_BLOCK_SIZE * SQUARE_BLOCK_SIZE ) size.
+     * Funkcja dzieli obraz na wiele obrazow o rozmiarze SQARE_BLOCK_SIZE * SQARE_BLOCK_SIZE (512*512)
      *
-     * @return : List of splitted images {List}
+     * @return : Zwraca liste wyodrebnionych obrazow{List}
      * @parameter : Image {Bitmap}
      */
     public static List<Bitmap> splitImage(Bitmap bitmap) {
 
         //For height and width of the small image chunks
+        //Inicjalizacja zmiennych do przechowywania wysokosci i szerokosci malych kawalkow zdjecia
         int chunkHeight, chunkWidth;
 
         //To store all the small image chunks in bitmap format in this list
+        //kontener na wszystkie male kawalki zdjecia w formie bitmapy
         ArrayList<Bitmap> chunkedImages = new ArrayList<>();
 
         // Assume like a matrix in which the element is a Small Square block

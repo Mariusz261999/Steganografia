@@ -9,35 +9,32 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Crypto {
 
-    //Encryption Method
+    //Metoda kodujaca
     /*
     @parameter : Message {String}, Secret key {String}
     @return : Encrypted Message {String}
      */
     public static String encryptMessage(String message, String secret_key) throws Exception {
 
-        // Creating key and cipher
-        SecretKeySpec aesKey = new SecretKeySpec(secret_key.getBytes(), "AES"); //Wbudowane
-        Cipher cipher;  //Wbudowane
+        // Utworzenie cipher i klucza kodowania typu AES
+        SecretKeySpec aesKey = new SecretKeySpec(secret_key.getBytes(), "AES");   //secret_key zamieniony na bajty
+        Cipher cipher;
 
         //AES cipher
         cipher = Cipher.getInstance("AES");
 
-        // encrypt the text
-        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-
-        byte[] encrypted;
-
-        encrypted = cipher.doFinal(message.getBytes());
+        // kodowanie tekstu za pomoca cipher
+        cipher.init(Cipher.ENCRYPT_MODE, aesKey);                                 //inicjuje szyfr za pomoca klucza
+        byte[] encrypted;                                                         //utorzenie tablica bajtow
+        encrypted = cipher.doFinal(message.getBytes());                           //wypelnienie tablicy bajtow zakodowana wiadomoscia, doFinal-konczy operacje szyfrowania
 
         Log.d("crypto", "Encrypted  in crypto (mine): " + Arrays.toString(encrypted) + "string: " + android.util.Base64.encodeToString(cipher.doFinal(message.getBytes()), 0));
-
         Log.d("crypto", "Encrypted  in crypto (theirs): " + Arrays.toString(cipher.doFinal(message.getBytes())) + "string : " + new String(encrypted));
 
-        return android.util.Base64.encodeToString(cipher.doFinal(message.getBytes()), 0);
+        return android.util.Base64.encodeToString(encrypted, 0); //zwraca zaszyfrowana wiadomosc
     }
 
-    //Decryption Method
+    //Metoda dekodujaca
     /*
     @parameter : Encrypted Message {String}, Secret key {String}
     @return : Message {String}
