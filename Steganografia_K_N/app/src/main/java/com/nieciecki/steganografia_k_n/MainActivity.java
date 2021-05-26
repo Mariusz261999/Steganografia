@@ -15,18 +15,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Button btnEncode = findViewById(R.id.btnEncode);
         Button btnDecode = findViewById(R.id.btnDecode);
         Button btnAuthors = findViewById(R.id.btnAuthors);
-        Button buttonInfo = findViewById(R.id.btnInfo);
+        Button btnInfo = findViewById(R.id.btnInfo);
         Button btnExit = findViewById(R.id.btnExit);
 
-        buttonInfo.setOnClickListener(this::SteganoInfo);
+        btnInfo.setOnClickListener(this::SteganoInfo);
         btnExit.setOnClickListener(this::Exit);
         btnAuthors.setOnClickListener(this::AuthorsView);
-        btnEncode.setOnClickListener(this::DecodeView);
-        btnDecode.setOnClickListener(this::EncodeView);
+        btnEncode.setOnClickListener(this::EncodeView);
+        btnDecode.setOnClickListener(this::DecodeView);
     }
 
     public void SteganoInfo(View view){
@@ -44,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void DecodeView(View view){
-        startActivity(new Intent(getApplicationContext(), Encode.class));
+        startActivity(new Intent(getApplicationContext(), Decode.class));
     }
 
     public void EncodeView(View view){
-        startActivity(new Intent(getApplicationContext(), Decode.class));
+        startActivity(new Intent(getApplicationContext(), Encode.class));
     }
 }

@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Encode extends AppCompatActivity implements TextEncodingCallback{
-    private static final int SELECT_PICTURE = 100;
-    private static final String TAG = "Encode Class";
     //Deklaracja zmiennych edytowalnych przez użytkownika
     private EditText message;
     private EditText secretKey;
@@ -98,7 +96,7 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
         Intent intent = new Intent();                                      //utworzenie obiektu klasy intent (do wywolania aktywnosci)
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Wybierz zdjecie"),SELECT_PICTURE); //wywolanie funkcji
+        startActivityForResult(Intent.createChooser(intent,"Wybierz zdjecie"),100); //wywolanie funkcji
     }
 
     //Cialo funkcji wywolujacej wybor zdjecia z galerii
@@ -106,14 +104,13 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Image set to imageView
-        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {  //sprawdzenie warunkow
-
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null && data.getData() != null) {  //sprawdzenie warunkow
             filepath = data.getData();                                                                             //Przypisanie sciezki do zmiennej
             try {
                 originalImg = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);                   //przypisanie bitmapy(zdjecie do zakodowania)
                 textView.setText("WYBRANO ZDJECIE");                                                               //Wyswietlenie wiadomosci o wyborze zdjecia
             } catch (IOException e) {
-                Log.d(TAG, "Error : " + e);
+                Log.d("EncodeClass", "Error : " + e);
             }
         }
     }
