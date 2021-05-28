@@ -26,9 +26,10 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
     private EditText message;
     private EditText secretKey;
     private TextView textView;
+
     //Deklaracja obiektów uzywanych podczas kodowania
-    private TextEncoding textEncoding;                //z biblioteki
-    private ImageSteganography imageSteganography;    //z biblioteki
+    private TextEncoding textEncoding;                //z biblioteki ImageSteganography
+    private ImageSteganography imageSteganography;    //z biblioteki ImageSteganography
     private Uri filepath;                             //deklaracja zmiennej (sciezka do pliku)
     //Deklaracja bitmap
     private Bitmap originalImg;                       //Bitmapa oryginalnego zdjęcia
@@ -58,7 +59,7 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
                 if(filepath!=null){                                                                                                             //sprawdzenie czy wybrano zdjecie
                     if(message.getText()!=null){                                                                                                //sprawdzenie czy wpisano wiadomosc do zakodowania
                         imageSteganography = new ImageSteganography(message.getText().toString(), secretKey.getText().toString(), originalImg); //Stworzenie obieku klasy ImageSteganography (wraz z podanymi atrybutami) - zwraca zaszyfrowana wiadomosc
-                        textEncoding = new TextEncoding(Encode.this, Encode.this);                                        //Klasa textEncoding
+                        textEncoding = new TextEncoding(Encode.this, Encode.this);                                        //Stworzenie obiektu klasy textEncoding
                         textEncoding.execute(imageSteganography);
                     }
                 }
@@ -77,7 +78,7 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
         });
 
     }
-
+    //funkcja zapisaujaca grafike w katalogu downloads
     private void saveEncodedImg(Bitmap bitmapImage){
         OutputStream fOut;
         File file = new File(Environment.getExternalStoragePublicDirectory(
@@ -93,18 +94,17 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
 
     //Cialo funkcji wybierajacej zdjecie do zakodowania
     private void imageChooser() {
-        Intent intent = new Intent();                                      //utworzenie obiektu klasy intent (do wywolania aktywnosci)
+        Intent intent = new Intent();                                                                             //utworzenie obiektu klasy intent (do wywolania aktywnosci)
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Wybierz zdjecie"),100); //wywolanie funkcji
+        startActivityForResult(Intent.createChooser(intent,"Wybierz zdjecie"),100);               //wywolanie funkcji
     }
 
     //Cialo funkcji wywolujacej wybor zdjecia z galerii
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Image set to imageView
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null && data.getData() != null) {  //sprawdzenie warunkow
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null && data.getData() != null) {             //sprawdzenie warunkow potrzebnych przy wyborze zdjecia
             filepath = data.getData();                                                                             //Przypisanie sciezki do zmiennej
             try {
                 originalImg = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);                   //przypisanie bitmapy(zdjecie do zakodowania)
@@ -120,7 +120,7 @@ public class Encode extends AppCompatActivity implements TextEncodingCallback{
     @Override
     public void onCompleteTextEncoding(ImageSteganography result) {
         if (result != null && result.isEncoded()) {
-            encodedImg = result.getEncoded_image();                //przypisanie pomyslnie zakodowanego zdjecia
+            encodedImg = result.getEncoded_image();                                                                 //przypisanie pomyslnie zakodowanego zdjecia
             textView.setText("ZAKODOWANO ZDJECIE");
         }
     }

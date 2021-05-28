@@ -9,18 +9,18 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-//    Button buttonInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //Zadeklarowanie przycisków i przypisanie ich do obiektow w widoku
         Button btnEncode = findViewById(R.id.btnEncode);
         Button btnDecode = findViewById(R.id.btnDecode);
         Button btnAuthors = findViewById(R.id.btnAuthors);
         Button btnInfo = findViewById(R.id.btnInfo);
         Button btnExit = findViewById(R.id.btnExit);
 
+        //uruchomienie fukncji reagujacej na klikniecie na każdym z przyciskow oraz wywolanie odpowiedznich funkcji
         btnInfo.setOnClickListener(this::SteganoInfo);
         btnExit.setOnClickListener(this::Exit);
         btnAuthors.setOnClickListener(this::AuthorsView);

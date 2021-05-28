@@ -32,7 +32,6 @@ class EncodeDecode {
      * @parameter : progressHandler {A handler interface, for the progress bar}
      */
     //Kodowanie zaszyfrowanej wiadomosci w zdjeciu na 2 najmniej znaczacych bitach zdjecia
-
     private static byte[] encodeMessage(int[] integer_pixel_array, int image_columns, int image_rows,
                                         MessageEncodingStatus messageEncodingStatus, ProgressHandler progressHandler) {
 
@@ -54,49 +53,31 @@ class EncodeDecode {
                 int element = row * image_columns + col;
 
                 byte tmp;
-
                 for (int channelIndex = 0; channelIndex < channels; channelIndex++) {
-
                     if (!messageEncodingStatus.isMessageEncoded()) {
-
                         // Shifting integer value by 2 in left and replacing the two least significant digits with the message_byte_array values..
                         //przesunięcie wartości całkowitej o 2 w lewo i zastąpienie dwóch najmniej znaczących cyfr wartościami message_byte_array.
                         tmp = (byte) ((((integer_pixel_array[element] >> binary[channelIndex]) & 0xFF) & 0xFC) | ((messageEncodingStatus.getByteArrayMessage()[messageEncodingStatus.getCurrentMessageIndex()] >> toShift[(shiftIndex++)
                                 % toShift.length]) & 0x3));// 6
-
                         if (shiftIndex % toShift.length == 0) {
-
                             messageEncodingStatus.incrementMessageIndex();
-
                             if (progressHandler != null)
                                 progressHandler.increment(1);
-
                         }
-
                         if (messageEncodingStatus.getCurrentMessageIndex() == messageEncodingStatus.getByteArrayMessage().length) {
-
                             messageEncodingStatus.setMessageEncoded();
-
                             if (progressHandler != null)
                                 progressHandler.finished();
-
                         }
                     } else {
                         //Simply copy the integer to result array
                         tmp = (byte) ((((integer_pixel_array[element] >> binary[channelIndex]) & 0xFF)));
                     }
-
                     result[resultIndex++] = tmp;
-
                 }
-
             }
-
         }
-
-
         return result;
-
     }
 
     /**
@@ -111,14 +92,11 @@ class EncodeDecode {
                                              String encrypted_message, ProgressHandler progressHandler) {
 
         //Making result method
-
         List<Bitmap> result = new ArrayList<>(splitted_images.size());
-
 
         //Adding start and end message constants to the encrypted message
         encrypted_message = encrypted_message + END_MESSAGE_COSTANT;
         encrypted_message = START_MESSAGE_COSTANT + encrypted_message;
-
 
         //getting byte array from string
         byte[] byte_encrypted_message = encrypted_message.getBytes(Charset.forName("ISO-8859-1"));
@@ -180,7 +158,6 @@ class EncodeDecode {
                 result.add(bitmap.copy(bitmap.getConfig(), false));
             }
         }
-
         return result; //bitmapa z zakodowana wiadomoscia
     }
 
